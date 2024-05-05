@@ -10,28 +10,28 @@ data class Device(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    @Column(name = "Model")
+    @Column(name = "model")
     var model: String,
 
-    @Column(name = "Manufacturer")
+    @Column(name = "manufacturer")
     var manufacturer: String,
 
-    @Column(name = "SerialNumber")
+    @Column(name = "serial_number")
     var serialNumber: Long,
 
-    @Column(name = "PagePerMinute")
+    @Column(name = "page_per_minute")
     var pagePerMinute: Long,
 
-    @Column(name = "DateOfReceipt")
+    @Column(name = "date_of_receipt")
     var dateOfReceipt: Date,
 
-    @Column(name = "DateOfCommissioning")
+    @Column(name = "date_of_commissioning")
     var dateOfCommissioning: Date,
 
-    @Column(name = "UserId")
+    @Column(name = "user_id")
     var userId: Long,
 
-    @Column(name = "RoomId")
+    @Column(name = "room_id")
     var roomId: Long,
 ) {
     constructor() : this(0,

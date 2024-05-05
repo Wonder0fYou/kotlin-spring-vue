@@ -34,8 +34,8 @@ export default {
     return {
       user: {
         id: null,
-        Name: "",
-        Surname: "",
+        name: "",
+        surname: "",
         email: "",
       },
       submitted: false

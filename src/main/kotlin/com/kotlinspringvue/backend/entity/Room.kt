@@ -9,7 +9,7 @@ data class Room(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
-    @Column(name = "NameRoom")
+    @Column(name = "name_room")
     var nameRoom: String
 ) {
     constructor() : this(0,"") {
