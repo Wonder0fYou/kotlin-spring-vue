@@ -1,11 +1,16 @@
 <script>
 import DeviceDataService from '../services/DeviceDataService'
+import UsersDataService from "@/services/UsersDataService";
+import RoomDataService from "@/services/RoomDataService";
+import {watch} from "vue";
 
 export default {
   name: 'device-list',
   data() {
     return {
-      device: []
+      device: [],
+      room: [],
+      users: []
     }
   },
   methods: {
@@ -17,10 +22,42 @@ export default {
           .catch(e => {
             alert(e)
           })
+    },
+    retrieveUser(id) {
+      UsersDataService.get(id)
+          .then(response => {
+            this.users[id] = response.data
+          })
+          .catch((e => {
+            alert(e)
+          }))
+    },
+    retrieveRoom(id) {
+      RoomDataService.get(id)
+          .then(response => {
+            this.room[id] = response.data
+          })
+          .catch((e => {
+            alert(e)
+          }))
+    },
+    getUser (userId) {
+      return this.users[userId]
+          ? `${this.users[userId].name} ${this.users[userId].surname}`
+          : ''
+    },
+    getRoom (roomId) {
+      return this.room[roomId] ? this.room[roomId].nameRoom: ''
     }
   },
   mounted() {
     this.retrieveDevice()
+    watch(() => this.device, (newDeviceList) => {
+      newDeviceList.forEach(device => {
+        this.retrieveUser(device.userId);
+        this.retrieveRoom(device.roomId);
+      });
+    });
   }
 }
 </script>
@@ -36,8 +73,8 @@ export default {
         <th scope="col">Page Per Minute</th>
         <th scope="col">Date Of Receipt</th>
         <th scope="col">Date Of Commissioning</th>
-        <th scope="col">User Id</th>
-        <th scope="col">Room Id</th>
+        <th scope="col">User</th>
+        <th scope="col">Room</th>
         <th scope="col">Actions</th>
       </tr>
       </thead>
@@ -49,8 +86,8 @@ export default {
         <td>{{ device.pagePerMinute }}</td>
         <td>{{ device.dateOfReceipt }}</td>
         <td>{{ device.dateOfCommissioning }}</td>
-        <td>{{ device.userId }}</td>
-        <td>{{ device.roomId }}</td>
+        <td>{{ getUser(device.userId)}}</td>
+        <td>{{ getRoom(device.roomId) }}</td>
         <td><a :href="'/device/' + device.id" class="btn btn-primary">Edit</a></td>
       </tr>
       </tbody>
