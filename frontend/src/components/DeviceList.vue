@@ -94,3 +94,24 @@ export default {
     </table>
   </div>
 </template>
+
+<style scoped>
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tbody tr {
+  border-bottom: 2px solid #eee; /* Separator for data rows */
+}
+</style>

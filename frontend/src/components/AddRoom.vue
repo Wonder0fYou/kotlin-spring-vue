@@ -52,3 +52,45 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+/* Basic form styling */
+.form-label {
+  font-weight: bold;
+}
+
+.form-control {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Spacing between form elements */
+.mb-3 {
+  margin-bottom: 16px;
+}
+
+/* Button styling */
+.btn {
+  padding: 10px 15px;
+  background-color: #0d6efd; /* Primary blue color */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #0b5ed7; /* Darker blue on hover */
+}
+
+/* Success alert styling */
+.alert-success {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+  padding: 10px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+}
+</style>
