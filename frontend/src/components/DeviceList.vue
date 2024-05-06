@@ -3,6 +3,7 @@ import DeviceDataService from '../services/DeviceDataService'
 import UsersDataService from "@/services/UsersDataService";
 import RoomDataService from "@/services/RoomDataService";
 import {watch} from "vue";
+import * as XLSX from "xlsx";
 
 export default {
   name: 'device-list',
@@ -10,7 +11,8 @@ export default {
     return {
       device: [],
       room: [],
-      users: []
+      users: [],
+      name:''
     }
   },
   methods: {
@@ -48,6 +50,13 @@ export default {
     },
     getRoom (roomId) {
       return this.room[roomId] ? this.room[roomId].nameRoom: ''
+    },
+    ExportExcel(type, fn, dl) {
+      var elt = this.$refs.exportable_table;
+      var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+      return dl ?
+          XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
+          XLSX.writeFile(wb, fn || ((this.name.length ?  this.name + '.' : 'SheetJSTableExport.') + (type || 'xlsx')));
     }
   },
   mounted() {
@@ -64,7 +73,7 @@ export default {
 
 <template>
   <div>
-    <table class="table">
+    <table ref="exportable_table" class="table">
       <thead>
       <tr>
         <th scope="col">Model</th>
@@ -92,10 +101,23 @@ export default {
       </tr>
       </tbody>
     </table>
+    <div>
+      <button @click="ExportExcel('xlsx')">Скачать Excel</button>
+    </div>
   </div>
 </template>
 
 <style scoped>
+
+button {
+  padding: 10px 20px;
+  background-color: #4CAF50; /* Зеленый */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -112,6 +134,6 @@ th {
 }
 
 tbody tr {
-  border-bottom: 2px solid #eee; /* Separator for data rows */
+  border-bottom: 2px solid #eee;
 }
 </style>

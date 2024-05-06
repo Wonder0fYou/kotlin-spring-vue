@@ -1,37 +1,37 @@
 <script>
-import UsersDataService from '../services/UsersDataService'
+import RoomDataService from '../services/RoomDataService'
 
 export default {
-  name: 'edit-user',
+  name: 'edit-room',
   data() {
     return {
-      user: null,
+      room: null,
       message: ''
     }
   },
   methods: {
-    getUser(id) {
-      UsersDataService.get(id)
+    getRoom(id) {
+      RoomDataService.get(id)
           .then(response => {
-            this.user = response.data
+            this.room = response.data
           })
           .catch(e => {
             alert(e)
           })
     },
-    updateUser() {
-      UsersDataService.update(this.user.id, this.user)
+    updateRoom() {
+      RoomDataService.update(this.room.id, this.room)
           .then(() => {
-            this.message = 'The user was updated successfully!'
+            this.message = 'The room was updated successfully!'
           })
           .catch(e => {
             alert(e)
           })
     },
-    deleteUser() {
-      UsersDataService.delete(this.user.id)
+    deleteRoom() {
+      RoomDataService.delete(this.room.id)
           .then(() => {
-            this.$router.push({name: 'users'})
+            this.$router.push({name: 'room'})
           })
           .catch(e => {
             alert(e)
@@ -40,29 +40,21 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.getUser(this.$route.params.id);
+      this.getRoom(this.$route.params.id);
     });
   }
 }
 </script>
 
 <template>
-  <div v-if="user">
+  <div v-if="room">
     <div class="mb-3">
-      <label for="userName" class="form-label">User Name</label>
-      <input type="text" class="form-control" id="firstName" required name="firstName" v-model="user.name">
+      <label for="nameRoom" class="form-label">Room Name</label>
+      <input type="text" class="form-control" id="nameRoom" required name="nameRoom" v-model="room.name">
     </div>
     <div class="mb-3">
-      <label for="userSurname" class="form-label">User Surname</label>
-      <input type="text" class="form-control" id="lastName" required name="lastName" v-model="user.surname">
-    </div>
-    <div class="mb-3">
-      <label for="email" class="form-label">User Email</label>
-      <input type="text" class="form-control" id="email" required name="email" v-model="user.email">
-    </div>
-    <div class="mb-3">
-      <button @click="updateUser" class="btn btn-primary me-3">Update</button>
-      <button @click="deleteUser" class="btn btn-danger">Delete</button>
+      <button @click="updateRoom" class="btn btn-primary me-3">Update</button>
+      <button @click="deleteRoom" class="btn btn-danger">Delete</button>
     </div>
     <div class="alert alert-success" role="alert" v-if="message">
       {{message}}
@@ -71,7 +63,7 @@ export default {
 </template>
 
 <style scoped>
-.edit-user {
+.edit-room {
   width: 400px;
   margin: 20px auto;
   padding: 20px;

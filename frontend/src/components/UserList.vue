@@ -65,6 +65,6 @@ th {
 }
 
 tbody tr {
-  border-bottom: 2px solid #eee; /* Separator for data rows */
+  border-bottom: 2px solid #eee;
 }
 </style>

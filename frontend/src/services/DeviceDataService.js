@@ -20,6 +20,7 @@ class CustomerDataService {
     delete(id) {
         return http.delete(`/device/${id}`)
     }
+
 }
 
 export default new CustomerDataService()
