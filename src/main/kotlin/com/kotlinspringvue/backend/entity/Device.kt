@@ -28,11 +28,20 @@ data class Device(
     @Column(name = "date_of_commissioning")
     var dateOfCommissioning: Date,
 
-    @Column(name = "user_id")
-    var userId: Long,
+    @Column(name = "paper_format")
+    var paperFormat: String,
 
-    @Column(name = "room_id")
-    var roomId: Long,
+    @Column(name = "print_color")
+    var printColor: String,
+
+    @Column(name = "min_dpi")
+    var midDpi: String,
+
+    @Column(name = "user_fio")
+    var userFio: String,
+
+    @Column(name = "room_name")
+    var roomName: String
 ) {
     constructor() : this(0,
         "",
@@ -41,8 +50,10 @@ data class Device(
         0,
         Date(0),
         Date(0),
-        0,
-        0) {
-
+        "",
+        "",
+        "",
+        "",
+        "") {
     }
 }

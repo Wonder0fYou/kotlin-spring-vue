@@ -27,8 +27,7 @@ class UserController(private val userRepository: UserRepository) {
     @PutMapping("users/{id}")
     fun updateUser(@PathVariable(value = "id") id: Long, @RequestBody user: User): ResponseEntity<User> {
         return userRepository.findById(id).map { existingUser ->
-            existingUser.name = user.name
-            existingUser.surname = user.surname
+            existingUser.fio = user.fio
             existingUser.email = user.email
             ResponseEntity.ok().body(userRepository.save(existingUser))
         }.orElse(ResponseEntity.notFound().build())

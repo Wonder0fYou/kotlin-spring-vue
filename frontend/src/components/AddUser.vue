@@ -2,12 +2,8 @@
   <div>
     <div v-if="!submitted">
       <div class="mb-3">
-        <label for="userName" class="form-label">User Name</label>
-        <input type="text" class="form-control" id="firstName" required name="firstName" v-model="user.name">
-      </div>
-      <div class="mb-3">
-        <label for="userSurname" class="form-label">User Surname</label>
-        <input type="text" class="form-control" id="lastName" required name="lastName" v-model="user.surname">
+        <label for="userFio" class="form-label">User FIO</label>
+        <input type="text" class="form-control" id="fio" required name="fio" v-model="user.fio">
       </div>
       <div class="mb-3">
         <label for="email" class="form-label">User Email</label>
@@ -34,9 +30,8 @@ export default {
     return {
       user: {
         id: null,
-        name: "",
-        surname: "",
-        email: "",
+        fio: "",
+        email: ""
       },
       submitted: false
     }
@@ -44,9 +39,8 @@ export default {
   methods: {
     saveUser() {
       var data = {
-        name: this.user.name,
-        surname: this.user.surname,
-        email: this.user.email,
+        fio: this.user.fio,
+        email: this.user.email
       };
       UsersDataService.create(data)
           .then(response => {

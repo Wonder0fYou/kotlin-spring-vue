@@ -30,16 +30,14 @@ export default {
     <table class="table">
       <thead>
       <tr>
-        <th scope="col">User Name</th>
-        <th scope="col">User Surname</th>
+        <th scope="col">User FIO</th>
         <th scope="col">User Email</th>
         <th scope="col">Actions</th>
       </tr>
       </thead>
       <tbody v-for="(user, index) in users" :key="index">
       <tr>
-        <td>{{ user.name }}</td>
-        <td>{{ user.surname }}</td>
+        <td>{{ user.fio }}</td>
         <td>{{ user.email }}</td>
         <td><a :href="'/users/' + user.id" class="btn btn-primary">Edit</a></td>
       </tr>

@@ -1,8 +1,5 @@
 <script>
 import DeviceDataService from '../services/DeviceDataService'
-import UsersDataService from "@/services/UsersDataService";
-import RoomDataService from "@/services/RoomDataService";
-import {watch} from "vue";
 import * as XLSX from "xlsx";
 
 export default {
@@ -16,6 +13,18 @@ export default {
     }
   },
   methods: {
+    checkAmortization(dateOfCommissioning) {
+      const today = new Date();
+      const amortizationYears = 5;
+      const commissioningDate = new Date(dateOfCommissioning);
+      let yearsPassed = today.getFullYear() - commissioningDate.getFullYear();
+      // Проверка, учитывая месяц и день
+      if (today.getMonth() < commissioningDate.getMonth() ||
+          (today.getMonth() === commissioningDate.getMonth() && today.getDate() < commissioningDate.getDate())) {
+        yearsPassed--;
+      }
+      return yearsPassed >= amortizationYears ? 'Истек' : 'Не истек';
+    },
     retrieveDevice() {
       DeviceDataService.getAll()
           .then(response => {
@@ -24,32 +33,6 @@ export default {
           .catch(e => {
             alert(e)
           })
-    },
-    retrieveUser(id) {
-      UsersDataService.get(id)
-          .then(response => {
-            this.users[id] = response.data
-          })
-          .catch((e => {
-            alert(e)
-          }))
-    },
-    retrieveRoom(id) {
-      RoomDataService.get(id)
-          .then(response => {
-            this.room[id] = response.data
-          })
-          .catch((e => {
-            alert(e)
-          }))
-    },
-    getUser (userId) {
-      return this.users[userId]
-          ? `${this.users[userId].name} ${this.users[userId].surname}`
-          : ''
-    },
-    getRoom (roomId) {
-      return this.room[roomId] ? this.room[roomId].nameRoom: ''
     },
     ExportExcel(type, fn, dl) {
       var elt = this.$refs.exportable_table;
@@ -61,12 +44,6 @@ export default {
   },
   mounted() {
     this.retrieveDevice()
-    watch(() => this.device, (newDeviceList) => {
-      newDeviceList.forEach(device => {
-        this.retrieveUser(device.userId);
-        this.retrieveRoom(device.roomId);
-      });
-    });
   }
 }
 </script>
@@ -82,8 +59,12 @@ export default {
         <th scope="col">Page Per Minute</th>
         <th scope="col">Date Of Receipt</th>
         <th scope="col">Date Of Commissioning</th>
-        <th scope="col">User</th>
-        <th scope="col">Room</th>
+        <th scope="col">Paper Format</th>
+        <th scope="col">Print Color</th>
+        <th scope="col">Min Dpi</th>
+        <th scope="col">User FIO</th>
+        <th scope="col">Room Name</th>
+        <th scope="col">Срок Амортизации</th>
         <th scope="col">Actions</th>
       </tr>
       </thead>
@@ -95,8 +76,12 @@ export default {
         <td>{{ device.pagePerMinute }}</td>
         <td>{{ device.dateOfReceipt }}</td>
         <td>{{ device.dateOfCommissioning }}</td>
-        <td>{{ getUser(device.userId)}}</td>
-        <td>{{ getRoom(device.roomId) }}</td>
+        <td>{{ device.paperFormat }}</td>
+        <td>{{ device.printColor }}</td>
+        <td>{{ device.midDpi }}</td>
+        <td>{{ device.userFio }}</td>
+        <td>{{ device.roomName }}</td>
+        <td>{{ checkAmortization(device.dateOfCommissioning) }}</td>
         <td><a :href="'/device/' + device.id" class="btn btn-primary">Edit</a></td>
       </tr>
       </tbody>

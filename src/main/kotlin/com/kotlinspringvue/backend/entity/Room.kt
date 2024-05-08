@@ -6,13 +6,15 @@ import jakarta.persistence.*
 @Table(name = "room")
 data class Room(
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
 
     @Column(name = "name_room")
     var nameRoom: String
+
 ) {
-    constructor() : this(0,"") {
+    constructor() : this(1, "") {
 
     }
 }

@@ -26,12 +26,40 @@
         <input type="date" class="form-control" id="dateOfCommissioning" required name="dateOfCommissioning" v-model="device.dateOfCommissioning">
       </div>
       <div class="mb-3">
-        <label for="userId" class="form-label">User Id</label>
-        <input type="number" class="form-control" id="userId" required name="userId" v-model="device.userId">
+        <label for="paperFormat" class="form-label">Paper Format</label>
+        <select class="form-control" id="paperFormat" required name="paperFormat" v-model="device.paperFormat">
+          <option value="A3">A3</option>
+          <option value="A4">A4</option>
+        </select>
       </div>
       <div class="mb-3">
-        <label for="roomId" class="form-label">Room Id</label>
-        <input type="number" class="form-control" id="roomId" required name="roomId" v-model="device.roomId">
+        <label for="printColor" class="form-label">Print Color</label>
+        <select class="form-control" id="printColor" required name="printColor" v-model="device.printColor">
+          <option value="Цветной">Цветной</option>
+          <option value="Черно-белый">Черно-белый</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="midDpi" class="form-label">Min Dpi</label>
+        <select class="form-control" id="midDpi" required name="midDpi" v-model="device.midDpi">
+          <option value="300x300">300x300</option>
+          <option value="600x480">600x480</option>
+          <option value="600x600">600x600</option>
+          <option value="1200x600">1200x600</option>
+          <option value="1200x1200">1200x1200</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="userFio" class="form-label">User Fio</label>
+        <select  class="form-control" id="userFio" required name="userFio" v-model="selectedUser">
+          <option v-for="(user, index) in users" :key="index" :value="user">{{user.fio}}</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="nameRoom" class="form-label">Room Name</label>
+        <select  class="form-control" id="nameRoom" required name="nameRoom" v-model="selectedRoom">
+          <option v-for="(room, index) in room" :key="index" :value="room">{{room.nameRoom}}</option>
+        </select>
       </div>
       <div class="mb-3">
         <button @click="saveDevice" class="btn btn-primary">Submit</button>
@@ -48,10 +76,14 @@
 
 <script>
 import DeviceDataService from '../services/DeviceDataService'
+import UsersDataService from '../services/UsersDataService'
+import RoomDataService from '../services/RoomDataService'
 export default {
   name: 'add-device',
   data() {
     return {
+      users: [],
+      room: [],
       device: {
         id: null,
         model: "",
@@ -60,13 +92,35 @@ export default {
         pagePerMinute: null,
         dateOfReceipt: Date(),
         dateOfCommissioning: Date(),
-        userId: null,
-        roomId: null
+        paperFormat: "",
+        printColor: "",
+        midDpi: "",
+        userFio: "",
+        roomName: ""
       },
+      selectedRoom: null,
       submitted: false
     }
   },
   methods: {
+    retrieveRoom() {
+      RoomDataService.getAll()
+          .then(response => {
+            this.room = response.data
+          })
+          .catch(e => {
+            alert(e)
+          })
+    },
+    retrieveUsers() {
+      UsersDataService.getAll()
+          .then(response => {
+            this.users = response.data;
+          })
+          .catch(e => {
+            alert(e);
+          });
+    },
     saveDevice() {
       var data = {
         model: this.device.model,
@@ -75,8 +129,11 @@ export default {
         pagePerMinute: this.device.pagePerMinute,
         dateOfReceipt: this.device.dateOfReceipt,
         dateOfCommissioning: this.device.dateOfCommissioning,
-        userId: this.device.userId,
-        roomId: this.device.roomId
+        paperFormat: this.device.paperFormat,
+        printColor: this.device.printColor,
+        midDpi: this.device.midDpi,
+        userFio: this.selectedUser.fio,
+        roomName: this.selectedRoom.nameRoom
       };
       DeviceDataService.create(data)
           .then(response => {
@@ -90,7 +147,13 @@ export default {
     newDevice() {
       this.submitted = false
       this.device = {}
+      this.selectedUser = null
+      this.selectedRoom = null
     }
+  },
+  mounted() {
+    this.retrieveUsers()
+    this.retrieveRoom()
   }
 }
 </script>
