@@ -1,15 +1,37 @@
 <script>
 import DeviceDataService from '../services/DeviceDataService'
+import RoomDataService from "@/services/RoomDataService";
+import UsersDataService from "@/services/UsersDataService";
 
 export default {
   name: 'edit-device',
   data() {
     return {
+      room: [],
+      users: [],
       device: null,
       message: ''
     }
   },
   methods: {
+    retrieveRoom() {
+      RoomDataService.getAll()
+          .then(response => {
+            this.room = response.data
+          })
+          .catch(e => {
+            alert(e)
+          })
+    },
+    retrieveUsers() {
+      UsersDataService.getAll()
+          .then(response => {
+            this.users = response.data;
+          })
+          .catch(e => {
+            alert(e);
+          });
+    },
     getDevice(id) {
       DeviceDataService.get(id)
           .then(response => {
@@ -42,6 +64,8 @@ export default {
     this.$nextTick(() => {
       this.getDevice(this.$route.params.id);
     });
+    this.retrieveUsers()
+    this.retrieveRoom()
   }
 }
 </script>
@@ -71,6 +95,42 @@ export default {
     <div class="mb-3">
       <label for="dateOfCommissioning" class="form-label">Date Of Commissioning</label>
       <input type="date" class="form-control" id="dateOfCommissioning" required name="dateOfCommissioning" v-model="device.dateOfCommissioning">
+    </div>
+    <div class="mb-3">
+      <label for="paperFormat" class="form-label">Paper Format</label>
+      <select class="form-control" id="paperFormat" required name="paperFormat" v-model="device.paperFormat">
+        <option value="A3">A3</option>
+        <option value="A4">A4</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="printColor" class="form-label">Print Color</label>
+      <select class="form-control" id="printColor" required name="printColor" v-model="device.printColor">
+        <option value="Цветной">Цветной</option>
+        <option value="Черно-белый">Черно-белый</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="midDpi" class="form-label">Min Dpi</label>
+      <select class="form-control" id="midDpi" required name="midDpi" v-model="device.midDpi">
+        <option value="300x300">300x300</option>
+        <option value="600x480">600x480</option>
+        <option value="600x600">600x600</option>
+        <option value="1200x600">1200x600</option>
+        <option value="1200x1200">1200x1200</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="userFio" class="form-label">User Fio</label>
+      <select  class="form-control" id="userFio" required name="userFio" v-model="selectedUser">
+        <option v-for="(user, index) in users" :key="index" :value="user">{{user.fio}}</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="nameRoom" class="form-label">Room Name</label>
+      <select  class="form-control" id="nameRoom" required name="nameRoom" v-model="selectedRoom">
+        <option v-for="(room, index) in room" :key="index" :value="room">{{room.nameRoom}}</option>
+      </select>
     </div>
     <div class="mb-3">
       <button @click="updateDevice" class="btn btn-primary me-3">Update</button>
