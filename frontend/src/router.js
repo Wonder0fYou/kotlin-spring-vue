@@ -42,13 +42,11 @@ const Router = createRouter({
         },
         {
             path: '/room/:id',
-            alias: '/room',
             name: 'edit-room',
             component: () => import('@/components/EditRoom.vue')
         },
         {
             path: '/device/:id',
-            alias: '/device',
             name: 'edit-device',
             component: () => import('@/components/EditDevice.vue')
         }

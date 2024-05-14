@@ -9,7 +9,15 @@ export default {
       device: [],
       room: [],
       users: [],
-      name:''
+      name:'',
+      filters: {
+        manufacturer: '',
+        userFio: '',
+        roomName: '',
+        amortization: '',
+        startDate: null,
+        endDate: null
+      }
     }
   },
   methods: {
@@ -42,6 +50,20 @@ export default {
           XLSX.writeFile(wb, fn || ((this.name.length ?  this.name + '.' : 'SheetJSTableExport.') + (type || 'xlsx')));
     }
   },
+  computed: {
+    filteredDevices() {
+      return this.device.filter(device => {
+        return (
+            device.manufacturer.toLowerCase().includes(this.filters.manufacturer.toLowerCase()) &&
+            device.userFio.toLowerCase().includes(this.filters.userFio.toLowerCase()) &&
+            device.roomName.toLowerCase().includes(this.filters.roomName.toLowerCase()) &&
+            (this.filters.amortization === '' || this.checkAmortization(device.dateOfCommissioning) === this.filters.amortization) &&
+            (!this.filters.startDate || new Date(device.dateOfCommissioning) >= new Date(this.filters.startDate)) &&
+            (!this.filters.endDate || new Date(device.dateOfCommissioning) <= new Date(this.filters.endDate))
+        );
+      });
+    }
+  },
   mounted() {
     this.retrieveDevice()
   }
@@ -50,6 +72,34 @@ export default {
 
 <template>
   <div>
+    <div>
+      <label for="manufacturerFilter">Manufacturer:</label>
+      <input type="text" id="manufacturerFilter" v-model="filters.manufacturer">
+    </div>
+    <div>
+      <label for="userFioFilter">User FIO:</label>
+      <input type="text" id="userFioFilter" v-model="filters.userFio">
+    </div>
+    <div>
+      <label for="roomNameFilter">Room Name:</label>
+      <input type="text" id="roomNameFilter" v-model="filters.roomName">
+    </div>
+    <div>
+      <label for="amortizationFilter">Срок Амортизации:</label>
+      <select id="amortizationFilter" v-model="filters.amortization">
+        <option value="">Все</option>
+        <option value="Истек">Истек</option>
+        <option value="Не истек">Не истек</option>
+      </select>
+    </div>
+    <div>
+      <label for="startDate">Начальная дата:</label>
+      <input type="date" id="startDate" v-model="filters.startDate">
+    </div>
+    <div>
+      <label for="endDate">Конечная дата:</label>
+      <input type="date" id="endDate" v-model="filters.endDate">
+    </div>
     <table ref="exportable_table" class="table">
       <thead>
       <tr>
@@ -68,7 +118,7 @@ export default {
         <th scope="col">Actions</th>
       </tr>
       </thead>
-      <tbody v-for="(device, index) in device" :key="index">
+      <tbody v-for="(device, index) in filteredDevices" :key="index">
       <tr>
         <td>{{ device.model }}</td>
         <td>{{ device.manufacturer }}</td>
